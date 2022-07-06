@@ -1,4 +1,5 @@
 using Abby.Data;
+using Abby.Data.Repository.IRepository;
 using Abby.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,32 +9,28 @@ namespace AbbyWeb.Pages.Admin.Categories
     [BindProperties]
     public class DeleteModel : PageModel
     {
-        private readonly ApplicationDbContext _db;
-
+        private readonly IUnitOfWork _unitOfWork;
         public Category? Category { get; set; }
 
-        public DeleteModel(ApplicationDbContext db)
+        public DeleteModel(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public void OnGet(int id)
         {
-            if (_db.Categories != null)
-            {
-                Category = _db.Categories.Find(id);
-            }
+            Category = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<IActionResult> OnPost()
+        public IActionResult OnPost()
         {
-            if (_db.Categories == null || Category == null)
+            if (Category == null)
             {
                 return Page();
             }
 
-            _db.Categories.Remove(Category);
-            await _db.SaveChangesAsync();
+            _unitOfWork.Category.Remove(Category);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
 
             return RedirectToPage("Index");
