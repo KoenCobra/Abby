@@ -3,14 +3,14 @@ using Abby.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AbbyWeb.Pages.Categories
+namespace AbbyWeb.Pages.Admin.FoodTypes
 {
     [BindProperties]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _db;
 
-        public Category? Category { get; set; }
+        public FoodType? FoodType { get; set; }
 
         public CreateModel(ApplicationDbContext db)
         {
@@ -23,14 +23,9 @@ namespace AbbyWeb.Pages.Categories
 
         public async Task<IActionResult> OnPost()
         {
-            if (_db.Categories == null || Category == null)
+            if (_db.FoodTypes == null || FoodType == null)
             {
                 return Page();
-            }
-
-            if (Category.Name == Category.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("Category.Name", "Name cannot be the same as display order");
             }
 
             if (!ModelState.IsValid)
@@ -39,9 +34,9 @@ namespace AbbyWeb.Pages.Categories
 
             }
 
-            await _db.Categories.AddAsync(Category);
+            await _db.FoodTypes.AddAsync(FoodType);
             await _db.SaveChangesAsync();
-            TempData["success"] = "Category created successfully";
+            TempData["success"] = "FoodType created successfully";
             return RedirectToPage("Index");
         }
     }

@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Abby.Data\Abby.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Customer\" />
+  </ItemGroup>
+
 </Project>

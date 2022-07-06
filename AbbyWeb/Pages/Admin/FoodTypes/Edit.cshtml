@@ -1,0 +1,25 @@
+﻿@page
+@model  AbbyWeb.Pages.Admin.FoodTypes.EditModel
+
+<form method="post">
+    <input hidden asp-for="FoodType.Id" />
+    <div class="border p-4 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary ps-3">
+                Edit FoodType
+            </h2>
+            <hr />
+        </div>
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3">
+            <label asp-for="@Model.FoodType.Name">Name:</label>
+            <input class="form-control" asp-for="@Model.FoodType.Name" />
+            <span asp-validation-for="FoodType.Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 150px">
+            <i class="bi bi-pencil-square"></i> Update
+        </button>
+        <a asp-page="Index" class="btn btn-warning" style="width: 150px">Back</a>
+    </div>
+</form>
+
