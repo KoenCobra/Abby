@@ -3,34 +3,36 @@ using Abby.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AbbyWeb.Pages.Admin.Categories
+namespace AbbyWeb.Pages.Admin.MenuItems
 {
     [BindProperties]
     public class DeleteModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
-        public Category? Category { get; set; }
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public DeleteModel(IUnitOfWork unitOfWork)
+        public MenuItem? MenuItem { get; set; }
+
+        public DeleteModel(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _hostEnvironment = hostEnvironment;
         }
 
         public void OnGet(int id)
         {
-            Category = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(x => x.Id == id);
         }
 
         public IActionResult OnPost()
         {
-            if (Category == null)
+            if (MenuItem == null)
             {
                 return Page();
             }
-
-            _unitOfWork.Category.Remove(Category);
+            _unitOfWork.MenuItem.Remove(MenuItem);
             _unitOfWork.Save();
-            TempData["success"] = "Category deleted successfully";
+            TempData["success"] = "MenuItem deleted successfully";
 
             return RedirectToPage("Index");
         }

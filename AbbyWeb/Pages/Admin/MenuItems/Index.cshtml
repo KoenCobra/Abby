@@ -15,15 +15,39 @@
 
     <br /><br />
 
-    <table class="table table-bordered table-striped w-100">
+    <table id="DT_load" class="table table-bordered table-striped" style="width:100%">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Food Type</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Food Type</th>
+                <th></th>
+            </tr>
         </thead>
+        <tbody>
+            @foreach (var item in Model.MenuItems)
+            {
+                <tr>
+                    <td width="25%">@item.Name</td>
+                    <td width="25%">@item.Price</td>
+                    <td width="25%">@item.Category.Name</td>
+                    <td width="25%">@item.Type.Name</td>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                            <a asp-page="Upsert" asp-route-id="@item.Id" class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@item.Id"  class="btn btn-danger mx-2">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
     </table>
 </div>
+

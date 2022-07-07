@@ -31,19 +31,47 @@ namespace Abby.Data.Repository
 
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = DbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties
+                             .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string? includeProperties = null)
         {
             IQueryable<T> query = DbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties
+                             .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
             return query.ToList();
         }
     }
